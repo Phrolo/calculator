@@ -12,66 +12,62 @@ const mainDisplay = document.getElementById("main-display");
 
 buttons.forEach(button => {
   button.addEventListener("click", () => {
-    /***
-     * TODO:
-     * Create the basic calculator logic. 
-    */
+    const buttonType = button.dataset.type;
+    const buttonValue = button.dataset.value; 
 
-    switch (button.dataset.type) {
+    switch (buttonType) {
       case "num":
-        const value = button.dataset.value;
-
-        if (mainDisplay.value.includes(".")
-         && value === ".")
+        if (mainDisplay.value.includes(".") &&
+          buttonValue === ".")
           break;
 
-        if (mainDisplay.value === "0" && value === "."){
-          mainDisplay.value += value;
+        if (mainDisplay.value === "0" &&
+          buttonValue === "."){
+          mainDisplay.value += buttonValue;
           break;
         }
 
         if (mainDisplay.value === "0"){
-          mainDisplay.value = value;
+          mainDisplay.value = buttonValue;
           break;
         }
 
-        mainDisplay.value += value;
+        mainDisplay.value += buttonValue;
+        break;
+      case "sign":
+        if (mainDisplay.value === "0") break;
+
+        if (mainDisplay.value.startsWith('-')){
+          mainDisplay.value = mainDisplay.value
+            .slice(1);
+        } else {
+          mainDisplay.value = '-' + mainDisplay.
+            value;
+        }
         break;
       case "op":
-        /***
-         * TODO: 
-         * Write the logic that handles appending
-         * operators to the expression. 
-        ***/
-        const operator = button.dataset.value;
+        if (mainDisplay.value === "0" &&
+          expressionDisplay.value === "") break;
 
+        if (mainDisplay.value === "0") {
+          expressionDisplay.value = expressionDisplay
+            .value.replace(/[\+\-\×\÷]\s*$/, 
+            `${buttonValue} `);
+          break;
+        }
+
+        expressionDisplay.value += mainDisplay.value
+          + ` ${buttonValue} `;
         mainDisplay.value = "0";
         break;
       case "clear":
-        mainDisplay.value = "0";
         expressionDisplay.value = "";
+        mainDisplay.value = "0";
         break;
       case "equals":
-        /***
-          * TODO: 
-          * Write the logic that evaluates the
-          * expression and displays the answer to
-          * the main display.
-          ***/
-        break;
-      case "sign":
-        if (mainDisplay.value !== "0") {
-          if(mainDisplay.value.startsWith('-')) {
-            mainDisplay.value = mainDisplay.value.slice(1);
-          } else {
-            mainDisplay.value = '-' + mainDisplay.value;
-          }
-        }
         break;
       default:
-        alert(button.dataset.type);
         break;
     }
   });
-})
-
+});
